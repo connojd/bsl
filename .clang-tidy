@@ -204,9 +204,9 @@ CheckOptions:
   - key:             hicpp-special-member-functions.AllowSoleDefaultDtor
     value:           '0'
   - key:             hicpp-uppercase-literal-suffix.IgnoreMacros
-    value:           '1'
+    value:           '0'
   - key:             hicpp-uppercase-literal-suffix.NewSuffixes
-    value:           ''
+    value:           'L;U;LU;UL;LLU;ULL'
   - key:             hicpp-use-auto.MinTypeNameLength
     value:           '5'
   - key:             hicpp-use-auto.RemoveStars
@@ -362,6 +362,6 @@ CheckOptions:
   - key:             readability-static-accessed-through-instance.NameSpecifierNestingThreshold
     value:           '3'
   - key:             readability-uppercase-literal-suffix.IgnoreMacros
-    value:           '1'
+    value:           '0'
   - key:             readability-uppercase-literal-suffix.NewSuffixes
-    value:           ''
+    value:           'L;U;LU;UL;LLU;ULL'
