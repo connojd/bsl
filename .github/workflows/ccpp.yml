@@ -8,7 +8,7 @@ on:
 
 jobs:
   Doxygen:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - name: Setup
@@ -22,25 +22,18 @@ jobs:
       shell: bash
 
   Clang_Format:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
       with:
         path: bsl
     - name: Setup
       run: |
-        CMAKE_URL="http://www.cmake.org/files/v3.13/cmake-3.13.4-Linux-x86_64.tar.gz"
-        mkdir custom_cmake
-        wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C custom_cmake
-        export PATH=$(pwd)/custom_cmake/bin:${PATH}
-        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        sudo apt-add-repository -y "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
-        sudo apt-get update
-        sudo apt-get install -y clang-10 clang-format-10 ninja-build
-        sudo update-alternatives --remove-all clang++
-        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-10 100
-        sudo update-alternatives --remove-all clang-format
-        sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-10 100
+        LLVM_URL="https://github.com/connojd/llvm-project/releases/download/v20.8.15/llvm_11.0.0git_amd64.deb"
+        wget --quiet ${LLVM_URL}
+        sudo dpkg -i llvm_11.0.0git_amd64.deb
+        sudo apt-get install -y ninja-build
+        clang-tidy -list-checks -checks=\*
       shell: bash
     - name: Validate Source Formatting
       run: |
@@ -57,24 +50,19 @@ jobs:
       shell: bash
 
   Clang_Tidy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
       with:
         path: bsl
     - name: Setup
       run: |
-        CMAKE_URL="http://www.cmake.org/files/v3.13/cmake-3.13.4-Linux-x86_64.tar.gz"
-        mkdir custom_cmake
-        wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C custom_cmake
-        export PATH=$(pwd)/custom_cmake/bin:${PATH}
-        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        sudo apt-add-repository -y "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
-        sudo apt-get update
-        sudo apt-get install -y clang-10 clang-tidy-10 ninja-build
-        sudo update-alternatives --remove-all clang++
-        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-10 100
-        sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-10 100
+        LLVM_URL="https://github.com/connojd/llvm-project/releases/download/v20.8.15/llvm_11.0.0git_amd64.deb"
+        wget --quiet ${LLVM_URL}
+        sudo apt purge llvm clang clang-tools clang-tidy clang-format lld
+        sudo dpkg -i llvm_11.0.0git_amd64.deb
+        sudo apt-get install -y ninja-build
+        clang-tidy -list-checks -checks=\*
       shell: bash
     - name: Validate Compliance
       run: |
@@ -84,7 +72,7 @@ jobs:
       shell: bash
 
   ASAN:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
       with:
@@ -111,7 +99,7 @@ jobs:
       shell: bash
 
   UBSAN:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
       with:
@@ -138,7 +126,7 @@ jobs:
       shell: bash
 
   Release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
       with:
@@ -164,7 +152,7 @@ jobs:
       shell: bash
 
   Debug:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
       with:
@@ -191,7 +179,7 @@ jobs:
       shell: bash
 
   Codecov:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
       with:
